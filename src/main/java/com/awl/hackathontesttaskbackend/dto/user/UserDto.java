@@ -1,4 +1,4 @@
-package com.awl.hackathontesttaskbackend.dto;
+package com.awl.hackathontesttaskbackend.dto.user;
 
 
 import lombok.AllArgsConstructor;
