@@ -1,7 +1,6 @@
 CREATE TABLE IF not exists user
 (
     id                   BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    username             VARCHAR(255)       not null unique,
     email                VARCHAR(255)       NOT NULL UNIQUE,
     password             VARCHAR(3000) default null,
     phone_number         VARCHAR(255)  default null,
