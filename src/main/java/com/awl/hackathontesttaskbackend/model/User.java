@@ -1,6 +1,7 @@
 package com.awl.hackathontesttaskbackend.model;
 
 
+import com.awl.hackathontesttaskbackend.enums.AuthProvider;
 import com.awl.hackathontesttaskbackend.enums.ERole;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -8,6 +9,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,7 +30,7 @@ public class User implements UserDetails {
     private Long id;
     @Column(nullable = false,unique = true)
     private String email;
-    @Column(length = 3000,nullable = false)
+    @Column(length = 3000)
     private String password;
     private String phoneNumber;
     private String imageUrl; // TODO: Need to set  default url
@@ -39,6 +42,13 @@ public class User implements UserDetails {
     @ElementCollection(targetClass = ERole.class,fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     private Set<ERole> roles = new HashSet<>();
+
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;

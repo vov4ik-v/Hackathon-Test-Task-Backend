@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionControllerAdvice {
-    @ExceptionHandler(value = EmailExistException.class)
-    public final ResponseEntity<String> handlerCustomException(EmailExistException exception) {
+    @ExceptionHandler(value = EmailAlreadyExistException.class)
+    public final ResponseEntity<String> handlerCustomException(EmailAlreadyExistException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
@@ -16,5 +16,20 @@ public class ExceptionControllerAdvice {
     public final ResponseEntity<String> handlerCustomException(EmailNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = OAuth2AuthenticationProcessingException.class)
+    public final ResponseEntity<String> handlerCustomException(OAuth2AuthenticationProcessingException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = BadRequestException.class)
+    public final ResponseEntity<String> handlerCustomException(BadRequestException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = OldPasswordIsIncorrectException.class)
+    public final ResponseEntity<String> handlerCustomException(OldPasswordIsIncorrectException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }
