@@ -50,7 +50,7 @@ public class UserService {
             LOG.info("Saving User {}", userIn.getEmail());
         } catch (Exception e) {
             LOG.error("Error during registration. {}",e.getMessage());
-            throw new EmailExistException("The user with email" + user.getEmail() + " already exist. Please check credentials");
+            throw new EmailExistException("The user with email " + user.getEmail() + " already exist. Please check credentials");
         }
 
 
