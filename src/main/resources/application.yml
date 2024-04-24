@@ -16,10 +16,22 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: vasiliwin17@gmail.com
+    password: skukuamzukhugdlp
+    properties.mail:
+      smtp:
+        auth: true
+        starttls.enable: true
+      protocol: smtps
+
 #  liquibase:
 #    change-log: classpath:/db/changelog/app-changelog.xml
 #    enabled: true
 #    default-schema: counter-display-service
+
   security:
     oauth2:
       client:
@@ -38,10 +50,6 @@ app:
   cors:
     allowedOrigins: http://localhost:3000,http://localhost:8088
   oauth2:
-    # After successfully authenticating with the OAuth2 Provider,
-    # we'll be generating an auth token for the user and sending the token to the
-    # redirectUri mentioned by the client in the /oauth2/authorize request.
-    # We're not using cookies because they won't work well in mobile clients.
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
       - myandroidapp://oauth2/redirect

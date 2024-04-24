@@ -53,11 +53,8 @@ public class User implements UserDetails {
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
 
-//    @NotNull
-//    @Enumerated(EnumType.STRING)
-//    private AuthProvider provider;
-//
-//    private String providerId;
+    @Column(columnDefinition = "text",unique = true)
+    private String resetPasswordToken;
 
 
     @Column(updatable = false)

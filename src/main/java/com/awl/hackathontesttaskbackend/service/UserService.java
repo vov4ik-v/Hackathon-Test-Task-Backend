@@ -10,6 +10,7 @@ import com.awl.hackathontesttaskbackend.enums.ERole;
 import com.awl.hackathontesttaskbackend.exeptions.EmailAlreadyExistException;
 import com.awl.hackathontesttaskbackend.exeptions.EmailNotFoundException;
 import com.awl.hackathontesttaskbackend.exeptions.OldPasswordIsIncorrectException;
+import com.awl.hackathontesttaskbackend.exeptions.UserNotExistException;
 import com.awl.hackathontesttaskbackend.model.User;
 import com.awl.hackathontesttaskbackend.repository.UserRepository;
 import com.awl.hackathontesttaskbackend.request.SignupRequest;
@@ -19,17 +20,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.UUID;
 
 @Service
 public class UserService {
     public static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+    private final EmailSenderService emailSenderService;
     private final BCryptPasswordEncoder passwordEncoder;
 
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, EmailSenderService emailSenderService, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.emailSenderService = emailSenderService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -110,4 +114,40 @@ public class UserService {
             return false;
         }
     }
+    public void forgotPassword(String email) {
+        User user = userRepository.findUserByEmail(email).orElse(null);
+        if (user == null) {
+            LOG.error("User with email:{} not found ", email);
+            throw new UserNotExistException("User with email: "+email+" not found");
+        } else {
+            String resetPasswordToken = UUID.randomUUID().toString();
+            setNewResetPasswordToken(resetPasswordToken, email);
+            String message = String.format(
+                    "Hello, %s! \n" +
+                            "Welcome to AUDI. Please, visit next link: http://localhost:8080/forget/%s",
+                    user.getUsername(),
+                    resetPasswordToken
+            );
+            emailSenderService.sendMail(email, "FORGOT YOUR PASSWORD", message);
+        }
+    }
+    public User getByResetToken(String resetPasswordToken) {
+        return userRepository.findUserByResetPasswordToken(resetPasswordToken).orElseThrow(() -> new UserNotExistException("User with token: " + resetPasswordToken + " not found"));
+    }
+    private void setNewResetPasswordToken(String token, String email) {
+        User user = userRepository.findUserByEmail(email).orElse(null);
+        if (user != null) {
+            user.setResetPasswordToken(token);
+            userRepository.save(user);
+        }
+
+    }
+    public void updateForgotPassword(User user, String newPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodePassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodePassword);
+        user.setResetPasswordToken(null);
+        userRepository.save(user);
+    }
+
 }
