@@ -2,7 +2,6 @@ package com.awl.hackathontesttaskbackend.security;
 
 
 
-import com.awl.hackathontesttaskbackend.model.User;
 import com.awl.hackathontesttaskbackend.repository.UserRepository;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ public class JWTTokenProvider {
     }
 
     public String generateToken(Authentication authentication){
-        User user = (User) authentication.getPrincipal();
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         Date now = new Date(System.currentTimeMillis());
 //        Date expiryDate = new Date(now.getTime()+ SecurityConstants.EXPIRATION_TIME);
         String userId = Long.toString(user.getId());

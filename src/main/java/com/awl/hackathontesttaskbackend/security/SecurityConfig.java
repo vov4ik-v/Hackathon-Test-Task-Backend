@@ -2,6 +2,10 @@ package com.awl.hackathontesttaskbackend.security;
 
 
 
+import com.awl.hackathontesttaskbackend.security.oauth2.CustomOAuth2UserService;
+import com.awl.hackathontesttaskbackend.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.awl.hackathontesttaskbackend.security.oauth2.OAuth2AuthenticationFailureHandler;
+import com.awl.hackathontesttaskbackend.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.awl.hackathontesttaskbackend.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,20 +33,63 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+    @Autowired
+    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+    @Autowired
+    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
+    @Bean
+    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+        return new HttpCookieOAuth2AuthorizationRequestRepository();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+        http.cors()
+                .and().csrf()
+//                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers("/api/auth/*","/swagger-resources/**",
+                .authorizeRequests()
+                .antMatchers("/",
+                        "/error",
+                        "/favicon.ico",
+                        "/**/*.png",
+                        "/**/*.gif",
+                        "/**/*.svg",
+                        "/**/*.jpg",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js",
+                        "/swagger-resources/**",
                         "/swagger-ui/**",
                         "/v2/api-docs",
-                        "/webjars/**").permitAll()
-                .anyRequest().authenticated();
+                        "/webjars/**")
+                .permitAll()
+                .antMatchers("/api/auth/**", "/api/oauth2/**", "/oauth2/**")
+                .permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login().authorizationEndpoint()
+                .baseUri("/oauth2/authorize")
+                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/oauth2/callback/*")
+                .and()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService).and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler);
 
-        http.addFilterBefore(jwtAuthenticationFilter(),
-                UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
@@ -56,11 +103,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
 
     }
+
     @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder(){
+    BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
 
     }
+
     @Bean
     public JWTAuthenticationFilter jwtAuthenticationFilter() {
         return new JWTAuthenticationFilter();
