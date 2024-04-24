@@ -28,7 +28,7 @@ public class UserController {
 
     private final UserService userService;
     private final UpdateOptionalUserInfoFacade updateOptionalUserInfoFacade;
-    private ResponseErrorValidation responseErrorValidation;
+    private final ResponseErrorValidation responseErrorValidation;
     @Autowired
     public UserController(UserService userService, UpdateOptionalUserInfoFacade updateOptionalUserInfoFacade, ResponseErrorValidation responseErrorValidation) {
         this.userService = userService;
@@ -64,6 +64,17 @@ public class UserController {
         if (!ObjectUtils.isEmpty(errors)) return errors;
         String response = userService.updatePassword(updatePasswordDto,principal);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
+    @PostMapping("/forgot")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email){
+        userService.forgotPassword(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping("/forgot/setNewPassword")
+    public ResponseEntity<?> setNewPassword(@RequestParam String resetToken,@RequestParam String password){
+        User user = userService.getByResetToken(resetToken);
+        userService.updateForgotPassword(user,password);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
