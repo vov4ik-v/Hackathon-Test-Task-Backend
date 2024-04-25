@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,11 +39,18 @@ public class User implements UserDetails {
     private Boolean isHelper;
     private String lastName;
 
+    //TODO:Add cascade
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "announcementMaker",orphanRemoval = true)
+    private List<Need> needList;
+
 
     @ElementCollection(targetClass = ERole.class,fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     private Set<ERole> roles = new HashSet<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_model_id", referencedColumnName = "id")
+    private ImageModel imageModel;
 
     @NotNull
     @Enumerated(EnumType.STRING)

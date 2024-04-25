@@ -35,6 +35,21 @@ public class ExceptionControllerAdvice {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = NeedNotFoundException.class)
+    public final ResponseEntity<String> handlerCustomException(NeedNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = IsNotYourNeedException.class)
+    public final ResponseEntity<String> handlerCustomException(IsNotYourNeedException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = ImageNotFoundException.class)
+    public final ResponseEntity<String> handlerCustomException(ImageNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 
 
 
