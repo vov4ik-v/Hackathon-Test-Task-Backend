@@ -40,6 +40,10 @@ public class UserService {
     public UserDto getCurrentUserDto(Principal principal) {
         return getUserDtoByPrincipal(principal);
     }
+    public User getCurrentUser(Principal principal) {
+        return getUserByPrincipal(principal);
+    }
+
     private UserDto getUserDtoByPrincipal(Principal principal) {
         String email = principal.getName();
         return userRepository.findUserDtoByEmail(email).orElseThrow(() -> new EmailNotFoundException("User not found with email " + email));
