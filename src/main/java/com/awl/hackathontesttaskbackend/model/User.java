@@ -36,6 +36,7 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String imageUrl; // TODO: Need to set  default url
     private String firstName;
+    private String bio;
     private Boolean isHelper;
     private String lastName;
 

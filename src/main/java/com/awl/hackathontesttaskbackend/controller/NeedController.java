@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.security.Principal;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class NeedController {
 
 
     @PostMapping("/create/activeFundraising")
-    private ResponseEntity<MessageResponse> createActiveFundraising(@RequestBody ActiveFundraisingDto activeFundraisingDto, Principal principal){
+    private ResponseEntity<MessageResponse> createActiveFundraising(@RequestBody ActiveFundraisingDto activeFundraisingDto, Principal principal) throws MessagingException {
         needService.createActiveFundraising(activeFundraisingDto,principal);
         return new ResponseEntity<>(new MessageResponse("Active Fundraising created successfully"), HttpStatus.CREATED);
     }
@@ -55,7 +56,7 @@ public class NeedController {
 
 
     @PostMapping("/create/humanitarianAid")
-    private ResponseEntity<MessageResponse> createHumanitarianAid(@RequestBody HumanitarianAidDto humanitarianAidDto, Principal principal){
+    private ResponseEntity<MessageResponse> createHumanitarianAid(@RequestBody HumanitarianAidDto humanitarianAidDto, Principal principal) throws MessagingException {
         needService.createHumanitarianAid(humanitarianAidDto,principal);
         return new ResponseEntity<>(new MessageResponse("Humanitarian Aid created successfully"), HttpStatus.CREATED);
     }
@@ -78,7 +79,7 @@ public class NeedController {
 
 
     @PostMapping("/create/psychologicalSupport")
-    private ResponseEntity<MessageResponse> createPsychologicalSupport(@RequestBody PsychologicalSupportDto psychologicalSupportDto, Principal principal){
+    private ResponseEntity<MessageResponse> createPsychologicalSupport(@RequestBody PsychologicalSupportDto psychologicalSupportDto, Principal principal) throws MessagingException {
         needService.createPsychologicalSupport(psychologicalSupportDto,principal);
         return new ResponseEntity<>(new MessageResponse("Psychological Support created successfully"), HttpStatus.CREATED);
     }

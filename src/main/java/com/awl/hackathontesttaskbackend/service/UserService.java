@@ -77,6 +77,7 @@ public class UserService {
     public User updateOptionalInfoUser(UpdateOptionalUserInfoDto updateOptionalUserInfoDto, Principal principal) {
         User user = getUserByPrincipal(principal);
         user.setImageUrl(updateOptionalUserInfoDto.getImageUrl());
+        user.setBio(updateOptionalUserInfoDto.getBio());
         user.setPhoneNumber(updateOptionalUserInfoDto.getPhoneNumber());
         user.setFirstName(updateOptionalUserInfoDto.getFirstName());
         user.setLastName(updateOptionalUserInfoDto.getLastName());

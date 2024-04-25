@@ -20,6 +20,7 @@ import com.awl.hackathontesttaskbackend.model.needs.SpecificForPsychologicalSupp
 import com.awl.hackathontesttaskbackend.repository.NeedRepository;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.security.Principal;
 import java.util.List;
 
@@ -28,19 +29,29 @@ public class NeedService {
     private final NeedRepository needRepository;
     private final ActiveFundraisingFacade activeFundraisingFacade;
     private final PsychologicalSupportFacade psychologicalSupportFacade;
+    private final EmailSenderService emailSenderService;
+    private final EmailService emailService;
     private final HumanitarianAidFacade humanitarianAidFacade;
     private final UserService userService;
 
-    public NeedService(NeedRepository needRepository, ActiveFundraisingFacade activeFundraisingFacade, PsychologicalSupportFacade psychologicalSupportFacade, HumanitarianAidFacade humanitarianAidFacade, UserService userService) {
+    public NeedService(NeedRepository needRepository, ActiveFundraisingFacade activeFundraisingFacade, PsychologicalSupportFacade psychologicalSupportFacade, EmailSenderService emailSenderService, EmailService emailService, HumanitarianAidFacade humanitarianAidFacade, UserService userService) {
         this.needRepository = needRepository;
         this.activeFundraisingFacade = activeFundraisingFacade;
         this.psychologicalSupportFacade = psychologicalSupportFacade;
+        this.emailSenderService = emailSenderService;
+        this.emailService = emailService;
         this.humanitarianAidFacade = humanitarianAidFacade;
         this.userService = userService;
     }
 
 
-    public void createActiveFundraising(ActiveFundraisingDto activeFundraisingDto, Principal principal) {
+    public  void sentEmailAboutNewNeedToAllEmails(NeedType needType, String description) throws MessagingException {
+        List<String> emails = emailService.getAllEmails(emailService.getAll());
+        emailSenderService.sendMailToManyPerson(emails,"New " + needType + " need in our site",description);
+
+
+    }
+    public void createActiveFundraising(ActiveFundraisingDto activeFundraisingDto, Principal principal) throws MessagingException {
         Need needToSave = new Need();
         needToSave.setImageUrl(activeFundraisingDto.getImageUrl());
         needToSave.setDescription(activeFundraisingDto.getDescription());
@@ -49,9 +60,10 @@ public class NeedService {
         needToSave.setSpecificForActiveFundraisings(activeFundraisingFacade.activeFundraisingDtoToModel(activeFundraisingDto));
         needToSave.setNeedType(NeedType.ACTIVE_FUNDRAISING);
         needRepository.save(needToSave);
+        sentEmailAboutNewNeedToAllEmails(needToSave.getNeedType(),needToSave.getDescription());
     }
 
-    public void createHumanitarianAid(HumanitarianAidDto humanitarianAidDto, Principal principal) {
+    public void createHumanitarianAid(HumanitarianAidDto humanitarianAidDto, Principal principal) throws MessagingException {
         Need needToSave = new Need();
         needToSave.setImageUrl(humanitarianAidDto.getImageUrl());
         needToSave.setDescription(humanitarianAidDto.getDescription());
@@ -60,10 +72,11 @@ public class NeedService {
         needToSave.setSpecificForHumanitarianAid(humanitarianAidFacade.humanitarianAidDtoToSpecificModel(humanitarianAidDto));
         needToSave.setNeedType(NeedType.HUMANITARIAN_AID);
         needRepository.save(needToSave);
+        sentEmailAboutNewNeedToAllEmails(needToSave.getNeedType(),needToSave.getDescription());
 
     }
 
-    public void createPsychologicalSupport(PsychologicalSupportDto psychologicalSupportDto, Principal principal) {
+    public void createPsychologicalSupport(PsychologicalSupportDto psychologicalSupportDto, Principal principal) throws MessagingException {
         Need needToSave = new Need();
         needToSave.setImageUrl(psychologicalSupportDto.getImageUrl());
         needToSave.setDescription(psychologicalSupportDto.getDescription());
@@ -72,6 +85,8 @@ public class NeedService {
         needToSave.setSpecificForPsychologicalSupport(psychologicalSupportFacade.psychologicalSupportDtoToModel(psychologicalSupportDto));
         needToSave.setNeedType(NeedType.PSYCHOLOGICAL_SUPPORT);
         needRepository.save(needToSave);
+        sentEmailAboutNewNeedToAllEmails(needToSave.getNeedType(),needToSave.getDescription());
+
     }
 
     public List<ActiveFundraisingDto> getAllActiveFundraisingDto() {
