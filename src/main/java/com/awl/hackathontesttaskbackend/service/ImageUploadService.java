@@ -49,6 +49,7 @@ public class ImageUploadService {
         imageModel.setImageBytes(compressBytes(file.getBytes()));
         imageModel.setName(file.getOriginalFilename());
         user.setImageModel(imageModel);
+        user.setImageUrl(null);
         imageRepository.save(imageModel);
         userRepository.save(user);
     }
@@ -70,7 +71,7 @@ public class ImageUploadService {
 
 
 
-    public ImageModel getImageToUser(Principal principal) throws DataFormatException {
+    public ImageModel getImageToUser(Principal principal) {
         User user = getUserByPrincipal(principal);
         ImageModel imageModel = imageRepository.findByUserId(user.getId()).orElse(null);
         if(!ObjectUtils.isEmpty(imageModel)){
@@ -81,7 +82,7 @@ public class ImageUploadService {
         return imageModel;
 
     }
-    public ImageModel getImageToUserByEmail(String email) throws DataFormatException {
+    public ImageModel getImageToUserByEmail(String email) {
         User user = userRepository.findUserByEmail(email) .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
         ImageModel imageModel = imageRepository.findByUserId(user.getId()).orElse(null);
         if(!ObjectUtils.isEmpty(imageModel)){
@@ -90,7 +91,7 @@ public class ImageUploadService {
         return imageModel;
 
     }
-    public ImageModel getImageToNeed(Long needId) throws DataFormatException {
+    public ImageModel getImageToNeed(Long needId) {
         ImageModel imageModel = imageRepository.findByNeedId(needId)
                 .orElseThrow(() -> new ImageNotFoundException("Cannot find image to Need: " + needId));
 
@@ -126,7 +127,7 @@ public class ImageUploadService {
 
     }
 
-    private static byte[] decompressBytes(byte[] data) throws DataFormatException {
+    private static byte[] decompressBytes(byte[] data) {
         Inflater inflater = new Inflater();
         inflater.setInput(data);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);

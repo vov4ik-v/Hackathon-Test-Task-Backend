@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class UpdateOptionalUserInfoDto {
     private String phoneNumber;
     private String imageUrl;
-    private String firstName;
-    private String lastName;
+    private String bio;
+    private String name;
 }

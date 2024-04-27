@@ -1,6 +1,7 @@
 package com.awl.hackathontesttaskbackend.controller;
 
 
+import com.awl.hackathontesttaskbackend.dto.EmailDto;
 import com.awl.hackathontesttaskbackend.dto.user.UpdateEmailDto;
 import com.awl.hackathontesttaskbackend.dto.user.UpdateOptionalUserInfoDto;
 import com.awl.hackathontesttaskbackend.dto.user.UpdatePasswordDto;
@@ -67,8 +68,8 @@ public class UserController {
     }
 
     @PostMapping("/forgot")
-    public ResponseEntity<?> forgotPassword(@RequestParam String email){
-        userService.forgotPassword(email);
+    public ResponseEntity<?> forgotPassword(@RequestBody EmailDto emailDto){
+        userService.forgotPassword(emailDto.getEmail());
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping("/forgot/setNewPassword")
