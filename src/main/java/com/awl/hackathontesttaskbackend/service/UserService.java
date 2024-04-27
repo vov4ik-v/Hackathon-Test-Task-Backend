@@ -57,8 +57,7 @@ public class UserService {
         User user = new User();
         user.setEmail(userIn.getEmail());
         user.setImageUrl("https://w7.pngwing.com/pngs/612/280/png-transparent-customer-user-userphoto-account-person-glyphs-icon.png");
-        user.setFirstName(userIn.getFirstName());
-        user.setLastName(userIn.getLastName());
+        user.setName(userIn.getName());
         user.setIsHelper(userIn.getIsHelper());
         user.setProvider(AuthProvider.local);
         user.setPassword(passwordEncoder.encode(userIn.getPassword()));
@@ -79,8 +78,7 @@ public class UserService {
         user.setImageUrl(updateOptionalUserInfoDto.getImageUrl());
         user.setBio(updateOptionalUserInfoDto.getBio());
         user.setPhoneNumber(updateOptionalUserInfoDto.getPhoneNumber());
-        user.setFirstName(updateOptionalUserInfoDto.getFirstName());
-        user.setLastName(updateOptionalUserInfoDto.getLastName());
+        user.setName(updateOptionalUserInfoDto.getName());
         return userRepository.save(user);
     }
 
@@ -107,13 +105,13 @@ public class UserService {
             return "Password change successfully";
         }
         else {
-            throw new OldPasswordIsIncorrectException("Passwords didn`t matches");
+            throw new OldPasswordIsIncorrectException("Old password is incorrect");
         }
     }
 
     public boolean isTruePassword(UpdatePasswordDto updatePasswordDto,User user){
         if(user != null){
-            return passwordEncoder.matches(user.getPassword(),updatePasswordDto.getOldPassword());
+            return passwordEncoder.matches(updatePasswordDto.getOldPassword(),user.getPassword());
         }
         else {
             return false;
@@ -129,7 +127,7 @@ public class UserService {
             setNewResetPasswordToken(resetPasswordToken, email);
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to AUDI. Please, visit next link: http://localhost:8080/forget/%s",
+                            "Welcome to Hackathon. Please, visit next link: http://localhost:3000/forget/%s",
                     user.getUsername(),
                     resetPasswordToken
             );

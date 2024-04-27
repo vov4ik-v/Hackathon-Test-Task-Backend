@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("select new com.awl.hackathontesttaskbackend.dto.user.UserDto(u.id, u.email, u.phoneNumber, u.imageUrl, u.firstName, u.lastName,u.isHelper) from User as u where u.email = :email")
+    @Query("select new com.awl.hackathontesttaskbackend.dto.user.UserDto(u.id, u.email, u.phoneNumber, u.imageUrl,u.bio, u.name, u.isHelper) from User as u where u.email = :email")
     Optional<UserDto> findUserDtoByEmail(@Param("email") String email);
     Optional<User> findUserById(Long id);
     Optional<User> findUserByEmail(String email);

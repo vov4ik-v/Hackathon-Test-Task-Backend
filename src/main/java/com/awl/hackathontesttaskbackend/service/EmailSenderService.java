@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Objects;
@@ -39,11 +40,12 @@ public class EmailSenderService {
     public void sendMailToManyPerson(List<String> emailList, String subject, String message) throws MessagingException {
         String[] emails =listToArray(emailList);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
-        messageHelper.setTo(emails);
-        messageHelper.setSubject(subject);
-        messageHelper.setText(message);
-        javaMailSender.send(mimeMessage);
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(emails);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(message);
+        mailMessage.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+        javaMailSender.send(mailMessage);
 
     }
     private String[] listToArray(List<String> emailList){

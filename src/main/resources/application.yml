@@ -56,3 +56,5 @@ app:
       - myiosapp://oauth2/redirect
 server:
   port: 8088
+  tomcat:
+    relaxed-query-chars: '|,{,},[,],^'

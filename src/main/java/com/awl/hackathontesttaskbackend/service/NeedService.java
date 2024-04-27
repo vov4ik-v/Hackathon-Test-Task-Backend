@@ -57,8 +57,8 @@ public class NeedService {
         needToSave.setDescription(activeFundraisingDto.getDescription());
         needToSave.setStateOfNeed(true);
         needToSave.setAnnouncementMaker(userService.getCurrentUser(principal));
-        needToSave.setSpecificForActiveFundraisings(activeFundraisingFacade.activeFundraisingDtoToModel(activeFundraisingDto));
         needToSave.setNeedType(NeedType.ACTIVE_FUNDRAISING);
+        needToSave.setSpecificForActiveFundraisings(activeFundraisingFacade.activeFundraisingDtoToModel(activeFundraisingDto));
         needRepository.save(needToSave);
         sentEmailAboutNewNeedToAllEmails(needToSave.getNeedType(),needToSave.getDescription());
     }
@@ -116,44 +116,65 @@ public class NeedService {
         updatedNeed.setStateOfNeed(updateHumanitarianAidDto.getStateOfNeed());
         updatedNeed.setImageUrl(updateHumanitarianAidDto.getImageUrl());
         updatedNeed.setDescription(updateHumanitarianAidDto.getDescription());
-        SpecificForHumanitarianAid specificForHumanitarianAid = new SpecificForHumanitarianAid();
-        specificForHumanitarianAid.setNeedName(updateHumanitarianAidDto.getNeedName());
-        specificForHumanitarianAid.setCity(updateHumanitarianAidDto.getCity());
+        SpecificForHumanitarianAid specificForHumanitarianAid = getHumanitarianAid(updateHumanitarianAidDto);
         updatedNeed.setSpecificForHumanitarianAid(specificForHumanitarianAid);
         needRepository.save(updatedNeed);
         return updateHumanitarianAidDto;
 
     }
 
+
+
     public UpdatePsychologicalSupportDto updatePsychologicalSupport(UpdatePsychologicalSupportDto updatePsychologicalSupportDto) {
         Need updatedNeed = getNeedById(updatePsychologicalSupportDto.getId());
         updatedNeed.setStateOfNeed(updatePsychologicalSupportDto.getStateOfNeed());
         updatedNeed.setImageUrl(updatePsychologicalSupportDto.getImageUrl());
         updatedNeed.setDescription(updatePsychologicalSupportDto.getDescription());
-        SpecificForPsychologicalSupport specificForPsychologicalSupport =new SpecificForPsychologicalSupport();
-        specificForPsychologicalSupport.setFirstName(updatePsychologicalSupportDto.getFirstName());
-        specificForPsychologicalSupport.setLastName(updatePsychologicalSupportDto.getLastName());
+        SpecificForPsychologicalSupport specificForPsychologicalSupport = getPsychologicalSupport(updatePsychologicalSupportDto);
         updatedNeed.setSpecificForPsychologicalSupport(specificForPsychologicalSupport);
         needRepository.save(updatedNeed);
         return updatePsychologicalSupportDto;
 
     }
 
+
+
     public UpdateActiveFundraisingDto updateActiveFundraising(UpdateActiveFundraisingDto updateActiveFundraisingDto) {
         Need updatedNeed =getNeedById(updateActiveFundraisingDto.getId());
         updatedNeed.setStateOfNeed(updateActiveFundraisingDto.getStateOfNeed());
         updatedNeed.setImageUrl(updateActiveFundraisingDto.getImageUrl());
         updatedNeed.setDescription(updateActiveFundraisingDto.getDescription());
+        SpecificForActiveFundraisings specificForActiveFundraisings = getActiveFundraisings(updateActiveFundraisingDto);
+        updatedNeed.setSpecificForActiveFundraisings(specificForActiveFundraisings);
+        needRepository.save(updatedNeed);
+        return updateActiveFundraisingDto;
+
+    }
+
+
+
+
+    private static SpecificForActiveFundraisings getActiveFundraisings(UpdateActiveFundraisingDto updateActiveFundraisingDto) {
         SpecificForActiveFundraisings specificForActiveFundraisings = new SpecificForActiveFundraisings();
         specificForActiveFundraisings.setNeedyThing(updateActiveFundraisingDto.getNeedyThing());
         specificForActiveFundraisings.setForWhom(updateActiveFundraisingDto.getForWhom());
         specificForActiveFundraisings.setMoneyGoal(updateActiveFundraisingDto.getMoneyGoal());
         specificForActiveFundraisings.setDonationUrl(updateActiveFundraisingDto.getDonationUrl());
         specificForActiveFundraisings.setGoalName(updateActiveFundraisingDto.getGoalName());
-        updatedNeed.setSpecificForActiveFundraisings(specificForActiveFundraisings);
-        needRepository.save(updatedNeed);
-        return updateActiveFundraisingDto;
+        return specificForActiveFundraisings;
+    }
 
+    private static SpecificForHumanitarianAid getHumanitarianAid(UpdateHumanitarianAidDto updateHumanitarianAidDto) {
+        SpecificForHumanitarianAid specificForHumanitarianAid = new SpecificForHumanitarianAid();
+        specificForHumanitarianAid.setNeedName(updateHumanitarianAidDto.getNeedName());
+        specificForHumanitarianAid.setCity(updateHumanitarianAidDto.getCity());
+        return specificForHumanitarianAid;
+    }
+    private static SpecificForPsychologicalSupport getPsychologicalSupport(UpdatePsychologicalSupportDto updatePsychologicalSupportDto) {
+        SpecificForPsychologicalSupport specificForPsychologicalSupport =new SpecificForPsychologicalSupport();
+        specificForPsychologicalSupport.setFirstName(updatePsychologicalSupportDto.getFirstName());
+        specificForPsychologicalSupport.setLastName(updatePsychologicalSupportDto.getLastName());
+        return specificForPsychologicalSupport;
     }
 
     private Need getNeedById(Long updateActiveFundraisingDto) {

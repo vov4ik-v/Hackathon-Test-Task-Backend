@@ -35,10 +35,9 @@ public class User implements UserDetails {
     private String password;
     private String phoneNumber;
     private String imageUrl; // TODO: Need to set  default url
-    private String firstName;
+    private String name;
     private String bio;
     private Boolean isHelper;
-    private String lastName;
 
     //TODO:Add cascade
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "announcementMaker",orphanRemoval = true)

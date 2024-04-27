@@ -13,8 +13,7 @@ public class UpdateOptionalUserInfoFacade {
         UpdateOptionalUserInfoDto updateOptionalUserInfoDto = new UpdateOptionalUserInfoDto();
         updateOptionalUserInfoDto.setImageUrl(user.getImageUrl());
         updateOptionalUserInfoDto.setPhoneNumber(user.getPhoneNumber());
-        updateOptionalUserInfoDto.setLastName(user.getLastName());
-        updateOptionalUserInfoDto.setFirstName(user.getFirstName());
+        updateOptionalUserInfoDto.setName(user.getName());
         return updateOptionalUserInfoDto;
     }
 }
