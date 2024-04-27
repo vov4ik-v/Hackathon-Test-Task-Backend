@@ -11,6 +11,10 @@ public class ExceptionControllerAdvice {
     public final ResponseEntity<String> handlerCustomException(EmailAlreadyExistException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(value = NoEmailsToSendException.class)
+    public final ResponseEntity<String> handlerCustomException(NoEmailsToSendException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(value = EmailNotFoundException.class)
     public final ResponseEntity<String> handlerCustomException(EmailNotFoundException exception) {

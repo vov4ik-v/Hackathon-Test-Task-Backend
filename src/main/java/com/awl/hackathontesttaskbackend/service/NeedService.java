@@ -47,7 +47,9 @@ public class NeedService {
 
     public  void sentEmailAboutNewNeedToAllEmails(NeedType needType, String description) throws MessagingException {
         List<String> emails = emailService.getAllEmails(emailService.getAll());
-        emailSenderService.sendMailToManyPerson(emails,"New " + needType + " need in our site",description);
+        if (!emails.isEmpty()) {
+            emailSenderService.sendMailToManyPerson(emails, "New " + needType + " need in our site", description);
+        }
 
 
     }

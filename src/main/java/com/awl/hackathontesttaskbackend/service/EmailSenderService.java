@@ -1,5 +1,6 @@
 package com.awl.hackathontesttaskbackend.service;
 
+import com.awl.hackathontesttaskbackend.exeptions.NoEmailsToSendException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -38,8 +39,8 @@ public class EmailSenderService {
     }
 
     public void sendMailToManyPerson(List<String> emailList, String subject, String message) throws MessagingException {
-        String[] emails =listToArray(emailList);
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        String[] emails = listToArray(emailList);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(emails);
         mailMessage.setSubject(subject);
@@ -47,10 +48,12 @@ public class EmailSenderService {
         mailMessage.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
         javaMailSender.send(mailMessage);
 
+
     }
-    private String[] listToArray(List<String> emailList){
+
+    private String[] listToArray(List<String> emailList) {
         String[] emails = new String[emailList.size()];
-        for (int i = 0; i<emailList.size();i++){
+        for (int i = 0; i < emailList.size(); i++) {
             emails[i] = emailList.get(i);
         }
         return emails;
