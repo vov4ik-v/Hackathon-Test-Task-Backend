@@ -53,6 +53,16 @@ public class NeedController {
         needService.deleteNeed(activeFundraisingId,principal);
         return new ResponseEntity<>(new MessageResponse("Active Fundraising deleted successfully"), HttpStatus.OK);
     }
+    @GetMapping("/sorted/activeFundraisingDesc")
+    private ResponseEntity<List<ActiveFundraisingDto>> sortedActiveFundraisings(){
+        List<ActiveFundraisingDto> activeFundraisingDtoList = needService.findAllActiveFundraisingSortedDesc();
+        return new ResponseEntity<>(activeFundraisingDtoList,HttpStatus.OK);
+    }
+    @GetMapping("/sorted/activeFundraisingAsc")
+    private ResponseEntity<List<ActiveFundraisingDto>> sortedActiveFundraisingAsc(){
+        List<ActiveFundraisingDto> activeFundraisingDtoList = needService.findAllActiveFundraisingSortedAcs();
+        return new ResponseEntity<>(activeFundraisingDtoList,HttpStatus.OK);
+    }
 
 
     @PostMapping("/create/humanitarianAid")
@@ -77,6 +87,17 @@ public class NeedController {
         return new ResponseEntity<>(new MessageResponse("Humanitarian Aid deleted successfully"), HttpStatus.OK);
     }
 
+    @GetMapping("/sorted/humanitarianAidDesc")
+    private ResponseEntity<List<HumanitarianAidDto>> sortedHumanitarianAidIdDesc(){
+        List<HumanitarianAidDto> activeFundraisingDtoList = needService.findAllHumanitarianAidSortedDesc();
+        return new ResponseEntity<>(activeFundraisingDtoList,HttpStatus.OK);
+    }
+    @GetMapping("/sorted/humanitarianAidAsc")
+    private ResponseEntity<List<HumanitarianAidDto>> sortedHumanitarianAidIdAsc(){
+        List<HumanitarianAidDto> activeFundraisingDtoList = needService.findAllHumanitarianAidSortedAcs();
+        return new ResponseEntity<>(activeFundraisingDtoList,HttpStatus.OK);
+    }
+
 
     @PostMapping("/create/psychologicalSupport")
     private ResponseEntity<MessageResponse> createPsychologicalSupport(@RequestBody PsychologicalSupportDto psychologicalSupportDto, Principal principal) throws MessagingException {
@@ -98,5 +119,16 @@ public class NeedController {
     private ResponseEntity<MessageResponse> deletePsychologicalSupport(@PathVariable("psychologicalSupportId") Long psychologicalSupportId, Principal principal){
         needService.deleteNeed(psychologicalSupportId,principal);
         return new ResponseEntity<>(new MessageResponse("Psychological Support deleted successfully"), HttpStatus.OK);
+    }
+
+    @GetMapping("/sorted/psychologicalSupportDesc")
+    private ResponseEntity<List<PsychologicalSupportDto>> sortedPsychologicalSupportDesc(){
+        List<PsychologicalSupportDto> activeFundraisingDtoList = needService.findAllPsychologicalSupportSortedDesc();
+        return new ResponseEntity<>(activeFundraisingDtoList,HttpStatus.OK);
+    }
+    @GetMapping("/sorted/psychologicalSupportAsc")
+    private ResponseEntity<List<PsychologicalSupportDto>> sortedPsychologicalSupportAsc(){
+        List<PsychologicalSupportDto> activeFundraisingDtoList = needService.findAllPsychologicalSupportSortedAcs();
+        return new ResponseEntity<>(activeFundraisingDtoList,HttpStatus.OK);
     }
 }

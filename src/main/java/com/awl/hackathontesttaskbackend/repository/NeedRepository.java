@@ -31,6 +31,23 @@ public interface NeedRepository extends JpaRepository<Need,Long> {
             "u.imageUrl, u.description,u.specificForPsychologicalSupport.firstName,u.specificForPsychologicalSupport.lastName) from Need u where u.needType = 'PSYCHOLOGICAL_SUPPORT'")
     List<PsychologicalSupportDto> findAllPsychologicalSupportDtos();
 
-//    @Query(value = "select Need from Need n where n.id = 2")
+
+
+    @Query(value = "select new com.awl.hackathontesttaskbackend.dto.needs.ActiveFundraisingDto(" +
+            "u.imageUrl, u.description,u.specificForActiveFundraisings.moneyGoal,u.specificForActiveFundraisings.goalName,u.specificForActiveFundraisings.needyThing,u.specificForActiveFundraisings.forWhom,u.specificForActiveFundraisings.donationUrl) from Need u where u.needType = 'ACTIVE_FUNDRAISING' order by u.createdDate desc ")
+    List<ActiveFundraisingDto> findAllActiveFundraisingSortedDesc();
+
+    @Query(value = "select new com.awl.hackathontesttaskbackend.dto.needs.ActiveFundraisingDto(" +
+            "u.imageUrl, u.description,u.specificForActiveFundraisings.moneyGoal,u.specificForActiveFundraisings.goalName,u.specificForActiveFundraisings.needyThing,u.specificForActiveFundraisings.forWhom,u.specificForActiveFundraisings.donationUrl) from Need u where u.needType = 'ACTIVE_FUNDRAISING' ORDER BY u.createdDate asc")
+    List<ActiveFundraisingDto> findAllActiveFundraisingSortedAsc();
+
     Optional<Need> findNeedById(Long id);
+
+    List<PsychologicalSupportDto> findAllPsychologicalSupportSortedDesc();
+
+    List<PsychologicalSupportDto> findAllPsychologicalSupportSortedAsc();
+
+    List<HumanitarianAidDto> findAllHumanitarianAidSortedDesc();
+
+    List<HumanitarianAidDto> findAllHumanitarianAidSortedAsc();
 }

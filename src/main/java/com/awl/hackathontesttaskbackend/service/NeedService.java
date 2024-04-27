@@ -153,6 +153,26 @@ public class NeedService {
 
     }
 
+    public List<ActiveFundraisingDto> findAllActiveFundraisingSortedDesc(){
+       return needRepository.findAllActiveFundraisingSortedDesc();
+    }
+    public List<ActiveFundraisingDto> findAllActiveFundraisingSortedAcs(){
+        return needRepository.findAllActiveFundraisingSortedAsc();
+    }
+    public List<PsychologicalSupportDto> findAllPsychologicalSupportSortedDesc(){
+        return needRepository.findAllPsychologicalSupportSortedDesc();
+    }
+    public List<PsychologicalSupportDto> findAllPsychologicalSupportSortedAcs(){
+        return needRepository.findAllPsychologicalSupportSortedAsc();
+    }
+    public List<HumanitarianAidDto> findAllHumanitarianAidSortedDesc(){
+        return needRepository.findAllHumanitarianAidSortedDesc();
+    }
+    public List<HumanitarianAidDto> findAllHumanitarianAidSortedAcs(){
+        return needRepository.findAllHumanitarianAidSortedAsc();
+    }
+
+
 
 
 
