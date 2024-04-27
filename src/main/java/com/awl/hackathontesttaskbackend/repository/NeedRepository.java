@@ -42,12 +42,18 @@ public interface NeedRepository extends JpaRepository<Need,Long> {
     List<ActiveFundraisingDto> findAllActiveFundraisingSortedAsc();
 
     Optional<Need> findNeedById(Long id);
-
+    @Query(value = "select new com.awl.hackathontesttaskbackend.dto.needs.PsychologicalSupportDto(" +
+            "u.imageUrl, u.description,u.specificForPsychologicalSupport.firstName,u.specificForPsychologicalSupport.lastName) from Need u where u.needType = 'PSYCHOLOGICAL_SUPPORT' ORDER BY u.createdDate desc ")
     List<PsychologicalSupportDto> findAllPsychologicalSupportSortedDesc();
-
+    @Query(value = "select new com.awl.hackathontesttaskbackend.dto.needs.PsychologicalSupportDto(" +
+            "u.imageUrl, u.description,u.specificForPsychologicalSupport.firstName,u.specificForPsychologicalSupport.lastName) from Need u where u.needType = 'PSYCHOLOGICAL_SUPPORT' ORDER BY u.createdDate asc")
     List<PsychologicalSupportDto> findAllPsychologicalSupportSortedAsc();
 
+    @Query(value = "select new com.awl.hackathontesttaskbackend.dto.needs.HumanitarianAidDto(" +
+            "u.imageUrl, u.description,u.specificForHumanitarianAid.needName,u.specificForHumanitarianAid.city) from Need u where  u.needType = 'HUMANITARIAN_AID'ORDER BY u.createdDate desc ")
     List<HumanitarianAidDto> findAllHumanitarianAidSortedDesc();
 
+    @Query(value = "select new com.awl.hackathontesttaskbackend.dto.needs.HumanitarianAidDto(" +
+            "u.imageUrl, u.description,u.specificForHumanitarianAid.needName,u.specificForHumanitarianAid.city) from Need u where  u.needType = 'HUMANITARIAN_AID'ORDER BY u.createdDate asc")
     List<HumanitarianAidDto> findAllHumanitarianAidSortedAsc();
 }

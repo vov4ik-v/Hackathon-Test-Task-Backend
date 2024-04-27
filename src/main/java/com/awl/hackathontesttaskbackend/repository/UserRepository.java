@@ -2,12 +2,14 @@ package com.awl.hackathontesttaskbackend.repository;
 
 
 import com.awl.hackathontesttaskbackend.dto.user.UserDto;
+import com.awl.hackathontesttaskbackend.model.Need;
 import com.awl.hackathontesttaskbackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository

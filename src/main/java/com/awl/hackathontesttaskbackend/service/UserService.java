@@ -7,11 +7,10 @@ import com.awl.hackathontesttaskbackend.dto.user.UpdatePasswordDto;
 import com.awl.hackathontesttaskbackend.dto.user.UserDto;
 import com.awl.hackathontesttaskbackend.enums.AuthProvider;
 import com.awl.hackathontesttaskbackend.enums.ERole;
-import com.awl.hackathontesttaskbackend.exeptions.EmailAlreadyExistException;
-import com.awl.hackathontesttaskbackend.exeptions.EmailNotFoundException;
-import com.awl.hackathontesttaskbackend.exeptions.OldPasswordIsIncorrectException;
-import com.awl.hackathontesttaskbackend.exeptions.UserNotExistException;
+import com.awl.hackathontesttaskbackend.exeptions.*;
+import com.awl.hackathontesttaskbackend.model.Need;
 import com.awl.hackathontesttaskbackend.model.User;
+import com.awl.hackathontesttaskbackend.repository.NeedRepository;
 import com.awl.hackathontesttaskbackend.repository.UserRepository;
 import com.awl.hackathontesttaskbackend.request.SignupRequest;
 import org.slf4j.Logger;
@@ -20,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,12 +27,14 @@ public class UserService {
     public static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+    private final NeedRepository needRepository;
     private final EmailSenderService emailSenderService;
     private final BCryptPasswordEncoder passwordEncoder;
 
 
-    public UserService(UserRepository userRepository, EmailSenderService emailSenderService, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, NeedRepository needRepository, EmailSenderService emailSenderService, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.needRepository = needRepository;
         this.emailSenderService = emailSenderService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -127,7 +129,7 @@ public class UserService {
             setNewResetPasswordToken(resetPasswordToken, email);
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Hackathon. Please, visit next link: http://localhost:3000/forget/%s",
+                            "Welcome to Hackathon. Please, visit next link: http://localhost:3000/forget/reset_password?token=%s",
                     user.getUsername(),
                     resetPasswordToken
             );
@@ -153,4 +155,20 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void addNeedToSaved(Long needId, Principal principal) {
+        Need needToAdd = needRepository.findNeedById(needId).orElseThrow(()-> new NeedNotFoundException("Need not found"));
+        User user = getUserByPrincipal(principal);
+        user.getSelectedNeeded().add(needToAdd);
+        userRepository.save(user);
+    }
+
+    public List<Need> getSavedNeedToCurrentUser(Principal principal) {
+        User user = getUserByPrincipal(principal);
+        return user.getSelectedNeeded();
+    }
+
+    public List<Need> getNeedToCurrentUser(Principal principal) {
+        User user = getUserByPrincipal(principal);
+        return user.getNeedList();
+    }
 }

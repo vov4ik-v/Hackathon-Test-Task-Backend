@@ -4,6 +4,7 @@ package com.awl.hackathontesttaskbackend.model;
 import com.awl.hackathontesttaskbackend.enums.AuthProvider;
 import com.awl.hackathontesttaskbackend.enums.ERole;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -12,7 +13,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -42,6 +45,14 @@ public class User implements UserDetails {
     //TODO:Add cascade
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "announcementMaker",orphanRemoval = true)
     private List<Need> needList;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_selectedNeed",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "need_id"))
+    @JsonIgnore
+    private List<Need> selectedNeeded;
 
 
     @ElementCollection(targetClass = ERole.class,fetch = FetchType.EAGER)
