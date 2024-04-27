@@ -7,7 +7,10 @@ import com.awl.hackathontesttaskbackend.dto.user.UpdateOptionalUserInfoDto;
 import com.awl.hackathontesttaskbackend.dto.user.UpdatePasswordDto;
 import com.awl.hackathontesttaskbackend.dto.user.UserDto;
 import com.awl.hackathontesttaskbackend.facade.UpdateOptionalUserInfoFacade;
+import com.awl.hackathontesttaskbackend.model.Need;
 import com.awl.hackathontesttaskbackend.model.User;
+import com.awl.hackathontesttaskbackend.request.ResetPasswordRequest;
+import com.awl.hackathontesttaskbackend.response.MessageResponse;
 import com.awl.hackathontesttaskbackend.service.UserService;
 import com.awl.hackathontesttaskbackend.validations.ResponseErrorValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/user")
@@ -73,9 +77,24 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping("/forgot/setNewPassword")
-    public ResponseEntity<?> setNewPassword(@RequestParam String resetToken,@RequestParam String password){
-        User user = userService.getByResetToken(resetToken);
-        userService.updateForgotPassword(user,password);
+    public ResponseEntity<?> setNewPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
+        User user = userService.getByResetToken(resetPasswordRequest.getToken());
+        userService.updateForgotPassword(user, resetPasswordRequest.getPassword());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/getSavedNeedToCurrentUser")
+    private ResponseEntity<List<Need>> getSavedNeedToCurrentUser(Principal principal){
+        List<Need> savedNeed = userService.getSavedNeedToCurrentUser(principal);
+        return new ResponseEntity<>(savedNeed,HttpStatus.OK);
+    }
+    @GetMapping("/getNeedToCurrentUser")
+    private ResponseEntity<List<Need>> getNeedToCurrentUser(Principal principal){
+        List<Need> needs = userService.getNeedToCurrentUser(principal);
+        return new ResponseEntity<>(needs,HttpStatus.OK);
+    }
+    @PostMapping("/addNeedToSaved/{needId}")
+    private ResponseEntity<MessageResponse> addNeedToSaved(@PathVariable("needId") Long needId, Principal principal){
+        userService.addNeedToSaved(needId,principal);
+        return new ResponseEntity<>(new MessageResponse("Need added successfully"),HttpStatus.CREATED);
     }
 }

@@ -12,17 +12,21 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 
 @Entity
 @Data
 @NoArgsConstructor
+@ToString(exclude = {"announcementMaker","usersWhoSelected"})
+
 public class Need {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,10 +58,11 @@ public class Need {
     @JsonIgnore
     private User announcementMaker;
 
+    @ManyToMany(mappedBy = "selectedNeeded")
+    @JsonIgnore
+    private List<User> usersWhoSelected;
+
     @Column(updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDateTime createdDate;
 
     @PrePersist
