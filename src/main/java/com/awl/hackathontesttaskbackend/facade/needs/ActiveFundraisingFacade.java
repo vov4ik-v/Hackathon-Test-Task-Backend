@@ -13,7 +13,7 @@ public class ActiveFundraisingFacade {
         specificForActiveFundraisings.setGoalName(activeFundraisingDto.getGoalName());
         specificForActiveFundraisings.setDonationUrl(activeFundraisingDto.getDonationUrl());
         specificForActiveFundraisings.setMoneyGoal(activeFundraisingDto.getMoneyGoal());
-        specificForActiveFundraisings.setNeedyThing(specificForActiveFundraisings.getNeedyThing());
+        specificForActiveFundraisings.setNeedyThing(activeFundraisingDto.getNeedyThing());
         return specificForActiveFundraisings;
     }
 }
