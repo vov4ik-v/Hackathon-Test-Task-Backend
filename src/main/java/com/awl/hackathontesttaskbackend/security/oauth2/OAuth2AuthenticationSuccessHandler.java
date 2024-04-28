@@ -4,6 +4,7 @@ package com.awl.hackathontesttaskbackend.security.oauth2;
 import com.awl.hackathontesttaskbackend.config.AppProperties;
 import com.awl.hackathontesttaskbackend.exeptions.BadRequestException;
 import com.awl.hackathontesttaskbackend.security.JWTTokenProvider;
+import com.awl.hackathontesttaskbackend.service.UserService;
 import com.awl.hackathontesttaskbackend.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import static com.awl.hackathontesttaskbackend.security.oauth2.HttpCookieOAuth2A
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTTokenProvider tokenProvider;
+
 
     @Autowired
     private AppProperties appProperties;
@@ -65,8 +67,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String token = tokenProvider.generateOauth2Token(authentication);
 
+
+
         return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", token)
+                .queryParam("token", "BEARER "+token)
                 .build().toUriString();
     }
 
