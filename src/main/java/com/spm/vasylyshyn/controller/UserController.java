@@ -4,7 +4,7 @@ package com.spm.vasylyshyn.controller;
 
 import com.spm.vasylyshyn.dto.user.*;
 import com.spm.vasylyshyn.response.ApiResponse;
-import com.spm.vasylyshyn.dto.DeviceDto;
+import com.spm.vasylyshyn.dto.device.DeviceDto;
 import com.spm.vasylyshyn.request.RegisterDeviceRequest;
 import com.spm.vasylyshyn.validations.ResponseErrorValidation;
 import com.spm.vasylyshyn.facade.UpdateOptionalUserInfoFacade;
@@ -47,6 +47,8 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
+
+//    TODO:Refactor it
     @GetMapping("/getDevicesForCurrentUser")
     public ResponseEntity<List<DeviceDto>> getDevicesForCurrentUser(Principal principal){
         List<DeviceDto> deviceDtoList = userService.getDeviceForCurrentUser(principal);

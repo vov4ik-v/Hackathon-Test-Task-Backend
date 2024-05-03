@@ -5,7 +5,7 @@ import com.spm.vasylyshyn.dto.user.*;
 import com.spm.vasylyshyn.exeptions.*;
 import com.spm.vasylyshyn.request.RegisterDeviceRequest;
 import com.spm.vasylyshyn.response.ApiResponse;
-import com.spm.vasylyshyn.dto.DeviceDto;
+import com.spm.vasylyshyn.dto.device.DeviceDto;
 import com.spm.vasylyshyn.enums.CounterType;
 import com.spm.vasylyshyn.enums.ERole;
 import com.spm.vasylyshyn.facade.DeviceFacade;
@@ -127,6 +127,9 @@ public class UserService {
 
     public UserDto getCurrentUserDto(Principal principal) {
         return getUserDtoByPrincipal(principal);
+    }
+    public User getCurrentUser(Principal principal) {
+        return getUserByPrincipal(principal);
     }
 
     private UserDto getUserDtoByPrincipal(Principal principal) {

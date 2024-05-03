@@ -1,4 +1,4 @@
-package com.spm.vasylyshyn.dto;
+package com.spm.vasylyshyn.dto.device;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
