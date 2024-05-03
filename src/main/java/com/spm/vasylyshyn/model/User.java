@@ -16,9 +16,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 
-
-
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -33,6 +30,7 @@ public class User implements UserDetails {
     @Column(length = 3000,nullable = false)
     private String password;
     private String phoneNumber;
+    @Column(columnDefinition = "VARCHAR(255) default 'https://w7.pngwing.com/pngs/612/280/png-transparent-customer-user-userphoto-account-person-glyphs-icon.png'")
     private String imageUrl; // TODO: Need to set  default url
     @Embedded
     private Address address;

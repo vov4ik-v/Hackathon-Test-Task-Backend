@@ -6,7 +6,6 @@ import com.spm.vasylyshyn.exeptions.*;
 import com.spm.vasylyshyn.request.RegisterDeviceRequest;
 import com.spm.vasylyshyn.response.ApiResponse;
 import com.spm.vasylyshyn.dto.device.DeviceDto;
-import com.spm.vasylyshyn.enums.CounterType;
 import com.spm.vasylyshyn.enums.ERole;
 import com.spm.vasylyshyn.facade.DeviceFacade;
 import com.spm.vasylyshyn.model.Device;
@@ -22,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,9 +49,7 @@ public class UserService {
     public void createUser(SignupRequest userIn) {
         User user = new User();
         user.setEmail(userIn.getEmail());
-        user.setImageUrl("https://w7.pngwing.com/pngs/612/280/png-transparent-customer-user-userphoto-account-person-glyphs-icon.png");
         user.setUsername(userIn.getUsername());
-//        user.setProvider(AuthProvider.local);
         user.setPassword(passwordEncoder.encode(userIn.getPassword()));
         user.getRoles().add(ERole.USER);
         try {
@@ -79,68 +75,64 @@ public class UserService {
 
     public String updateEmail(UpdateEmailDto updateEmailDto, Principal principal) {
         User user = getUserByPrincipal(principal);
-        String email  = updateEmailDto.getEmail();
+        String email = updateEmailDto.getEmail();
         boolean isPresent = userRepository.findUserByEmail(email).isPresent();
-        if(!isPresent){
-            user.setEmail(email);
-            userRepository.save(user);
-            return email;
-        }
-        else {
+        if (isPresent) {
             throw new EmailAlreadyExistException("Email already used");
         }
+        user.setEmail(email);
+        userRepository.save(user);
+        return email;
+
     }
+
     public String updateUsername(UpdateUsernameDto updateUsernameDto, Principal principal) {
         User user = getUserByPrincipal(principal);
-        String username  = updateUsernameDto.getUsername();
+        String username = updateUsernameDto.getUsername();
         boolean isPresent = userRepository.findUserByUsername(username).isPresent();
-        if(!isPresent){
-            user.setUsername(username);
-            userRepository.save(user);
-            return username;
-        }
-        else {
+        if (isPresent) {
             throw new UsernameAlreadyExistException("Username already used");
         }
+        user.setUsername(username);
+        userRepository.save(user);
+        return username;
     }
 
     public String updatePassword(UpdatePasswordDto updatePasswordDto, Principal principal) {
         User user = getUserByPrincipal(principal);
-        boolean isMatchesPassword = isTruePassword(updatePasswordDto,user);
-        if (isMatchesPassword){
-            user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
-            return "Password change successfully";
+        boolean isMatchesPassword = isTruePassword(updatePasswordDto, user);
+        if (!isMatchesPassword) {
+            throw new OldPasswordIsIncorectException("Passwords didn`t matches");
         }
-        else {
-           throw new OldPasswordIsIncorectException("Passwords didn`t matches");
-        }
+        user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+        return "Password change successfully";
+
     }
 
-    public boolean isTruePassword(UpdatePasswordDto updatePasswordDto,User user){
-        if(user != null){
-            return passwordEncoder.matches(user.getPassword(),updatePasswordDto.getOldPassword());
+    public boolean isTruePassword(UpdatePasswordDto updatePasswordDto, User user) {
+        if (user != null) {
+            return passwordEncoder.matches(user.getPassword(), updatePasswordDto.getCurrentPassword());
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     public UserDto getCurrentUserDto(Principal principal) {
         return getUserDtoByPrincipal(principal);
     }
+
     public User getCurrentUser(Principal principal) {
         return getUserByPrincipal(principal);
     }
 
     private UserDto getUserDtoByPrincipal(Principal principal) {
         String username = principal.getName();
-        return userRepository.findUserDtoByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
+        return userRepository.findUserDtoByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 
     private User getUserByPrincipal(Principal principal) {
         String username = principal.getName();
         return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
+                .orElseThrow(() -> new UserNotFoundException(username));
     }
 
     public List<DeviceDto> getDeviceForCurrentUser(Principal principal) {
@@ -151,33 +143,13 @@ public class UserService {
 
     public ApiResponse registerDevice(RegisterDeviceRequest registerDeviceRequest, Principal principal) {
         User user = getUserByPrincipal(principal);
-        Device device = deviceRepository.findDeviceBySerialNumber(registerDeviceRequest.getSerialNumber()).orElseThrow(()-> new DeviceHasNotYetBeenCreatedException("Device has not yet been created"));
+        Device device = deviceRepository.findDeviceBySerialNumber(registerDeviceRequest.getSerialNumber()).orElseThrow(() -> new DeviceHasNotYetBeenCreatedException("Device has not yet been created"));
         device.setOwner(user);
         user.getDeviceList().add(device);
         userRepository.save(user);
         deviceRepository.save(device);
-        return new ApiResponse(true,"Device added successfully");
+        return new ApiResponse(true, "Device added successfully");
     }
-
-
-// Затичка, після міграції переробити
-//    public ApiResponse addDeviceToUser(Long deviceNumber, CounterType deviceType, String address,
-////                                       String password,
-//                                       Principal principal) {
-//        User user = getUserByPrincipal(principal);
-//        Device device = deviceService.registerDevice(new DeviceDto(deviceNumber, "", null, address, 0L, deviceType, 0, LocalDateTime.now()));
-////        if (device.getPassword().equals(password)){
-//            device.setCounterType(deviceType);
-//            device.setOwner(user);
-//            user.getDeviceList().add(device);
-//            userRepository.save(user);
-//            deviceRepository.save(device);
-//
-//            return new ApiResponse(true,"Device added successfully");
-////        }
-//        else{
-//            return new ApiResponse(true,"Please write correct number or password");
-//        }
 
 
 }

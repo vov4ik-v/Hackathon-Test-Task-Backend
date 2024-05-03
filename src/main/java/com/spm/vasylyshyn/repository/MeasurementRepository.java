@@ -16,12 +16,13 @@ import java.util.Optional;
 public interface MeasurementRepository extends JpaRepository<Measurement, Long> {
     Optional<List<Measurement>> findMeasurementsByDevice(Device device);
 
-    @Query("select new com.spm.vasylyshyn.dto.MeasurementDto(m.id,m.measurement,m.isSubmitted,m.createdDate) from Measurement as m where m.id = max(m.id)")
+    @Query("select new com.spm.vasylyshyn.dto.MeasurementDto(m.id, m.measurement, m.isSubmitted, m.createdDate) from Measurement as m where m.id = max(m.id)")
     Optional<MeasurementDto> findDto(Device device);
 
-    List<Measurement> findMeasurementsByDeviceAndCreatedDateGreaterThanEqualAndCreatedDateLessThanEqual(Device device, LocalDateTime startRange, LocalDateTime endRange);
+//    TODO:Write a query statement
+    List<Measurement> findMeasurementsInRangeDate(Device device,  LocalDateTime startRange,  LocalDateTime endRange);
 
 
-    @Query("select new com.spm.vasylyshyn.dto.MeasurementDto(m.id,m.measurement,m.isSubmitted, m.createdDate) from Measurement as m where m.device = :device")
+    @Query("select new com.spm.vasylyshyn.dto.MeasurementDto(m.id, m.measurement, m.isSubmitted,  m.createdDate) from Measurement as m where m.device = :device")
     Optional<List<MeasurementDto>> findMeasurementsDtoByDevice(@Param("device") Device device);
 }

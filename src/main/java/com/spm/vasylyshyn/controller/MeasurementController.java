@@ -30,8 +30,7 @@ public class MeasurementController {
 
     @GetMapping("getLastCollectedMeasurement/{serialNumber}")
     public ResponseEntity<MeasurementDto> getLastCollectedMeasurement(@PathVariable("serialNumber") Long serialNumber){
-//        Measurement measurement = measurementService.getLastCollectedMeasurement(deviceNumber);
-//        MeasurementDto measurementDto = MeasurementDto.builder().id(measurement.getId()).measurement(measurement.getmeasurement()).build();
+
         return new ResponseEntity<>(measurementService.getLastCollectedMeasurement(serialNumber),HttpStatus.OK);
     }
 
@@ -51,9 +50,10 @@ public class MeasurementController {
 
 
     @GetMapping("getInRange/{serialNumber}")
-    public ResponseEntity<List<Measurement>> getMeasurementInDateRange(@PathVariable("serialNumber") Long serialNumber,
-                                                                          @RequestParam("startRange") LocalDateTime startRange,
-                                                                          @RequestParam("endRange")LocalDateTime endRange
+    public ResponseEntity<List<Measurement>> getMeasurementInDateRange(
+        @PathVariable("serialNumber") Long serialNumber,
+        @RequestParam("startRange") LocalDateTime startRange,
+        @RequestParam("endRange")LocalDateTime endRange
     ){
         List<Measurement> allMeasurementsInRange = measurementService.findAllmeasurementsInRange(serialNumber,startRange,endRange);
         return new ResponseEntity<>(allMeasurementsInRange,HttpStatus.OK);

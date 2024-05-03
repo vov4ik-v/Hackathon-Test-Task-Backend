@@ -14,6 +14,10 @@ public class ExceptionControllerAdvice {
     public final ResponseEntity<String> handlerCustomException(DeviceNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(value = UserNotFoundException.class)
+    public final ResponseEntity<String> handlerCustomException(UserNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(value = OldPasswordIsIncorectException.class)
     public final ResponseEntity<String> handlerCustomException(OldPasswordIsIncorectException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
