@@ -13,8 +13,4 @@ import java.util.Optional;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device,Long> {
     Optional<Device> findDeviceBySerialNumber(Long serialNumber);
-
-
-//    @Query("select new com.spm.vasylyshyn.dto.DeviceDto(d.numberOfDevice,d.cantoraName,d.Measurements,d.address,d.frequency,d.counterType,d.price,d.createdDate) from Device as d")
-//    Optional<DeviceDto> findDeviceDtoByNumberOfDevice(Long deviceNumber);
 }

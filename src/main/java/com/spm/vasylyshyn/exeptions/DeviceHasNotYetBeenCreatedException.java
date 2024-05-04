@@ -7,7 +7,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class DeviceHasNotYetBeenCreatedException extends RuntimeException {
     public DeviceHasNotYetBeenCreatedException(String message){
         super(message);
-
-
     }
 }

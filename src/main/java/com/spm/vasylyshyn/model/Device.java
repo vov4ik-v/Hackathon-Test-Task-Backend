@@ -2,19 +2,15 @@ package com.spm.vasylyshyn.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.spm.vasylyshyn.enums.CounterType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Entity
 @Getter
@@ -51,6 +47,7 @@ public class Device {
 
     @Embedded
     private StatisticSettings statisticSettings;
+
     @Embedded
     private NeededDataForSendMeasurement neededDataForSendMeasurement;
 

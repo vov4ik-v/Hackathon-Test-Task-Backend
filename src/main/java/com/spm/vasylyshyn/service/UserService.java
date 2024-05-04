@@ -1,22 +1,21 @@
 package com.spm.vasylyshyn.service;
 
 
-import com.spm.vasylyshyn.dto.user.*;
-import com.spm.vasylyshyn.exeptions.*;
-import com.spm.vasylyshyn.request.RegisterDeviceRequest;
-import com.spm.vasylyshyn.response.ApiResponse;
 import com.spm.vasylyshyn.dto.device.DeviceDto;
+import com.spm.vasylyshyn.dto.user.*;
 import com.spm.vasylyshyn.enums.ERole;
+import com.spm.vasylyshyn.exeptions.*;
 import com.spm.vasylyshyn.facade.DeviceFacade;
 import com.spm.vasylyshyn.model.Device;
 import com.spm.vasylyshyn.model.User;
 import com.spm.vasylyshyn.repository.DeviceRepository;
 import com.spm.vasylyshyn.repository.UserRepository;
+import com.spm.vasylyshyn.request.RegisterDeviceRequest;
 import com.spm.vasylyshyn.request.SignupRequest;
+import com.spm.vasylyshyn.response.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +57,6 @@ public class UserService {
             LOG.error("Error during registration. {}" + e.getMessage());
             throw new UserExistException("The user " + user.getUsername() + " already exist. Please check credentials");
         }
-
 
     }
 

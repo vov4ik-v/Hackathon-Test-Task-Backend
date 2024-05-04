@@ -55,7 +55,7 @@ public class MeasurementController {
         @RequestParam("startRange") LocalDateTime startRange,
         @RequestParam("endRange")LocalDateTime endRange
     ){
-        List<Measurement> allMeasurementsInRange = measurementService.findAllmeasurementsInRange(serialNumber,startRange,endRange);
+        List<Measurement> allMeasurementsInRange = measurementService.findAllmeasurementsInRange(serialNumber, startRange, endRange);
         return new ResponseEntity<>(allMeasurementsInRange,HttpStatus.OK);
     }
 }

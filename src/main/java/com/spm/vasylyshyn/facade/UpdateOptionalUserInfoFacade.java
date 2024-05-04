@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UpdateOptionalUserInfoFacade {
-
     public UpdateOptionalUserInfoDto userToUserDTO(User user){
         UpdateOptionalUserInfoDto updateOptionalUserInfoDto = new UpdateOptionalUserInfoDto();
         updateOptionalUserInfoDto.setImageUrl(user.getImageUrl());

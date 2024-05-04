@@ -17,5 +17,4 @@ public class UpdateOptionalUserInfoDto {
     private String firstName;
     private String lastName;
     private Address defaultAddressForNewDevices;
-
 }

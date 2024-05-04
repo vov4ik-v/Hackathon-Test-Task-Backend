@@ -22,5 +22,4 @@ public class SignupRequest {
     @NotEmpty(message = "Password is required")
     @Size(min = 4)
     private String password;
-
 }

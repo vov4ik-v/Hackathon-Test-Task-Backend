@@ -54,6 +54,7 @@ public class UserController {
         List<DeviceDto> deviceDtoList = userService.getDeviceForCurrentUser(principal);
         return new ResponseEntity<>(deviceDtoList,HttpStatus.OK);
     }
+
     @PostMapping("/update/optionalInfo")
     public ResponseEntity<Object> updateOptionalInfoUser(@Valid @RequestBody UpdateOptionalUserInfoDto updateOptionalUserInfoDto, BindingResult bindingResult, Principal principal){
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
@@ -79,6 +80,7 @@ public class UserController {
         return new ResponseEntity<>(username, HttpStatus.OK);
 
     }
+
     @PostMapping("/update/password")
     public ResponseEntity<Object> updatePassword(@Valid@RequestBody UpdatePasswordDto updatePasswordDto, BindingResult bindingResult, Principal principal){
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
@@ -88,14 +90,12 @@ public class UserController {
 
     }
 
-
     @PostMapping("/addDeviceToUser")
         public ResponseEntity<ApiResponse> addDeviceToUser(@RequestBody RegisterDeviceRequest registerDeviceRequest, Principal principal){
-           ApiResponse response =  userService.registerDevice(registerDeviceRequest,principal);
+           ApiResponse response =  userService.registerDevice(registerDeviceRequest, principal);
            return new ResponseEntity<>(response,HttpStatus.OK);
+
         }
-
-
 
 }
 
